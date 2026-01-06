@@ -10,7 +10,8 @@ export const errorHandler =
       try {
         return await handler(req, ctx);
       } catch (e: unknown) {
-        throw mapPrismaError(e);
+        mapPrismaError(e);
+        throw e;
       }
     } catch (e) {
       console.error(e);

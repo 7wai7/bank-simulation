@@ -22,9 +22,6 @@ export function mapPrismaError(e: unknown) {
 
       case "P2037":
         throw new AppError("Database overloaded", 400);
-
-      default:
-        throw new AppError("Internal server error", 500);
     }
   }
 

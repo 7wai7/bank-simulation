@@ -2,28 +2,37 @@
 
 import { useState } from "react";
 import clsx from "clsx";
-import { LoginRequestDTO } from "../../domains/auth/auth.dto";
-import { LoginRequestSchema } from "../../domains/auth/auth.schemas";
+import { RegisterRequestDTO } from "../../domains/auth/auth.dto";
+import {
+  LoginRequestSchema,
+  RegisterRequestSchema,
+} from "@/src/domains/auth/auth.schemas";
+import { loginApi, registerApi } from "@/src/domains/auth/auth.api";
+import { useRouter } from "next/navigation";
 
-type LoginFormState = LoginRequestDTO;
+type AuthFormState = RegisterRequestDTO;
 
-const initialState: LoginFormState = {
+const initialState: AuthFormState = {
   username: "",
   email: "",
   password: "",
 };
 
-export default function LoginPage() {
-  const [state, setState] = useState<LoginFormState>(initialState);
+export default function AuthPage() {
+  const [isSignup, setIsSignup] = useState(false);
+  const [state, setState] = useState<AuthFormState>(initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
-    const parsed = LoginRequestSchema.safeParse(state);
+    const parsed = (
+      isSignup ? RegisterRequestSchema : LoginRequestSchema
+    ).safeParse(state);
 
     if (!parsed.success) {
       setError(parsed.error.issues[0].message);
@@ -31,16 +40,19 @@ export default function LoginPage() {
       return;
     }
 
-    const dto: LoginRequestDTO = parsed.data;
+    const dto = parsed.data as RegisterRequestDTO;
 
-    setLoading(false);
+    (isSignup ? registerApi : loginApi)(dto)
+      .then(() => router.push("/"))
+      .catch((e) => e instanceof Error && setError(e.message))
+      .finally(() => setLoading(false));
   };
 
   const canSubmit =
     !loading &&
-    state.username.trim() &&
-    state.email.trim() &&
-    state.password.trim();
+    !!state.username.trim() &&
+    (!isSignup || !!state.email.trim()) &&
+    !!state.password.trim();
 
   return (
     <>
@@ -70,18 +82,20 @@ export default function LoginPage() {
             />
           </div>
 
-          <div className="flex flex-col space-y-1">
-            <label className="text-xs text-gray-500 tracking-wider">
-              EMAIL
-            </label>
-            <input
-              value={state.email}
-              onChange={(e) => setState({ ...state, email: e.target.value })}
-              type="email"
-              required
-              className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
-            />
-          </div>
+          {isSignup && (
+            <div className="flex flex-col space-y-1">
+              <label className="text-xs text-gray-500 tracking-wider">
+                EMAIL
+              </label>
+              <input
+                value={state.email}
+                onChange={(e) => setState({ ...state, email: e.target.value })}
+                type="email"
+                required
+                className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
+              />
+            </div>
+          )}
 
           <div className="flex flex-col space-y-1">
             <label className="text-xs text-gray-500 tracking-wider">
@@ -109,20 +123,25 @@ export default function LoginPage() {
             disabled={!canSubmit}
             type="submit"
             className={clsx(
-              "mt-2 px-4 py-2 border text-sm tracking-wider transition",
+              "mt-2 px-4 py-2 border text-sm tracking-wider transition cursor-pointer",
               !canSubmit
                 ? "border-gray-700 text-gray-600 cursor-not-allowed"
                 : "border-gray-500/40 hover:border-gray-400 hover:text-white animate-[pulse_2s_ease_infinite]"
             )}
           >
-            {loading ? "AUTHORIZING..." : "LOGIN"}
+            {loading ? "AUTHORIZING..." : isSignup ? "SIGNUP" : "LOGIN"}
           </button>
         </form>
 
         {/* Footer hint */}
         <div className="px-6 py-3 border-t border-gray-500/20 text-xs text-gray-500 flex justify-between">
-          <span>v0.1 demo</span>
           <span>All actions are logged</span>
+          <button
+            className="cursor-pointer text-gray-300 font-bold"
+            onClick={() => setIsSignup((prev) => !prev)}
+          >
+            {isSignup ? "Login" : "Register"}
+          </button>
         </div>
       </div>
     </>
