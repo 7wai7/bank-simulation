@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import clsx from "clsx";
-import z from "zod";
 import { LoginRequestDTO } from "../../domains/auth/auth.dto";
 import { LoginRequestSchema } from "../../domains/auth/auth.schemas";
 
@@ -45,7 +44,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="w-full max-w-md border border-gray-500/20">
+      <div className="w-full m-auto max-w-md border border-gray-500/20">
         {/* Title */}
         <div className="px-6 py-4 border-b border-gray-500/20">
           <h2 className="text-sm tracking-wider font-semibold text-gray-400">
