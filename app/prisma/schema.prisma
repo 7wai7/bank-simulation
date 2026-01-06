@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  username      String   @unique
+  email         String   @unique
+  hash_password String
+  createdAt     DateTime @default(now())
+
+  sentTransactions     Transaction[] @relation("TransactionFrom")
+  receivedTransactions Transaction[] @relation("TransactionTo")
+
+  ledger LedgerEntry[]
+}
+
+model Transaction {
+  id Int @id @default(autoincrement())
+
+  from    User @relation(fields: [from_id], references: [id], name: "TransactionFrom")
+  from_id Int
+  to      User @relation(fields: [to_id], references: [id], name: "TransactionTo")
+  to_id   Int
+
+  amount Int
+  date   DateTime @default(now())
+}
+
+model LedgerEntry {
+  id Int @id @default(autoincrement())
+
+  user    User @relation(fields: [user_id], references: [id])
+  user_id Int
+
+  amount    Int // + або -
+  createdAt DateTime @default(now())
+}
