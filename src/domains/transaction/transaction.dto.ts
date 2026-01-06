@@ -1,10 +1,12 @@
 import { UserJwtDTO } from "../auth/auth.dto";
 
-export type TransactionDTO = {
-  id: number;
+export type TransactionRequestDTO = {
   from: UserJwtDTO;
   to: UserJwtDTO;
-
   amount: number;
-  date: string;
 };
+
+export type TransactionDTO = {
+  id: number;
+  date: string;
+} & TransactionRequestDTO;

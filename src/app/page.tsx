@@ -1,14 +1,9 @@
 import clsx from "clsx";
 import { TransactionDTO } from "../domains/transaction/transaction.dto";
-import { UserJwtDTO } from "../domains/auth/auth.dto";
+import { requireUser } from "../shared/utils/requireUser";
 
-const user: UserJwtDTO = {
-  id: 1,
-  username: "User",
-  email: "email@gmail.com",
-};
-
-export default function Home() {
+export default async function Home() {
+  const user = await requireUser();
   const transactions: TransactionDTO[] = [];
 
   return (
@@ -36,11 +31,11 @@ export default function Home() {
               key={tx.id}
               className={clsx(
                 `flex justify-between py-2 border-b border-gray-500/20 text-sm transition-colors duration-300 hover:bg-gray-700 rounded-md px-2`,
-                tx.from.id === user.id ? "text-red-400" : "text-green-400"
+                tx.from.id === user!.id ? "text-red-400" : "text-green-400"
               )}
             >
               <span>
-                {tx.from.id === user.id
+                {tx.from.id === user!.id
                   ? `Sent to ${tx.to}`
                   : `Received from ${tx.from}`}
               </span>
