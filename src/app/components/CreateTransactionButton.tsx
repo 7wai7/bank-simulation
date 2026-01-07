@@ -1,15 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import CreateTransactionModal from "./CreateTransactionModal";
+import { useTransactionsStore } from "@/src/domains/transactions/transactions.store";
 
 export default function CreateTransactionButton() {
-  const [open, setOpen] = useState(false);
+  const setIsOpen = useTransactionsStore((s) => s.setIsOpenModal);
 
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => setIsOpen(true)}
         className="
           px-3 py-1
           border border-emerald-500/40
@@ -20,8 +19,6 @@ export default function CreateTransactionButton() {
       >
         + CREATE TX
       </button>
-
-      {open && <CreateTransactionModal onClose={() => setOpen(false)} />}
     </>
   );
 }

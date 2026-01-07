@@ -28,6 +28,7 @@ model Transaction {
   to_id   Int
 
   amount Int
+  status TransactionStatus
   date   DateTime @default(now())
 }
 
@@ -39,4 +40,9 @@ model LedgerEntry {
 
   amount    Int // + або -
   createdAt DateTime @default(now())
+}
+
+enum TransactionStatus {
+  SUCCESS
+  FAILED
 }

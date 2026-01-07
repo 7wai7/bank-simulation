@@ -1,12 +1,45 @@
 "use client";
 
+import { TransactionRequestDTO } from "@/src/domains/transactions/transactions.dto";
+import { useCreateTransaction } from "@/src/domains/transactions/transactions.hooks";
+import { TransactionRequestSchema } from "@/src/domains/transactions/transactions.schemas";
+import { useTransactionsStore } from "@/src/domains/transactions/transactions.store";
 import clsx from "clsx";
+import { useState } from "react";
 
-interface Props {
-  onClose: () => void;
-}
+type FormState = TransactionRequestDTO;
 
-export default function CreateTransactionModal({ onClose }: Props) {
+const initialState: FormState = {
+  to: "",
+  amount: 0,
+};
+
+export default function CreateTransactionModal() {
+  const isOpen = useTransactionsStore((s) => s.isOpenModal);
+  const setIsOpen = useTransactionsStore((s) => s.setIsOpenModal);
+
+  const [state, setState] = useState<FormState>(initialState);
+  const { error, mutate, isPending } = useCreateTransaction();
+  const [schemaErr, setSchemaErr] = useState<string | null>(null);
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSchemaErr(null);
+
+    const parsed = TransactionRequestSchema.safeParse(state);
+
+    if (!parsed.success) {
+      setSchemaErr(parsed.error.issues[0].message);
+      return;
+    }
+
+    mutate(parsed.data, { onSuccess: (data) => console.log(data) });
+  };
+
+  if (!isOpen) return null;
+
+  const err = error?.message ?? schemaErr;
+
   return (
     <div className="fixed inset-0 z-50 font-mono">
       {/* Backdrop */}
@@ -15,7 +48,7 @@ export default function CreateTransactionModal({ onClose }: Props) {
           absolute inset-0 bg-black/80 backdrop-blur-xs
           animate-[manifestation_300ms_ease_both]
         "
-        onClick={onClose}
+        onClick={() => setIsOpen(false)}
       />
 
       {/* Panel */}
@@ -42,41 +75,72 @@ export default function CreateTransactionModal({ onClose }: Props) {
         </div>
 
         {/* Body */}
-        <div className="flex-1 px-6 py-6 space-y-6 overflow-y-auto">
-          <Field label="Recipient email">
-            <input className={inputClass} placeholder="user@gmail.com" />
-          </Field>
+        <form className="flex flex-col flex-1" onSubmit={onSubmit}>
+          <div className="flex-1 px-6 py-6 space-y-6 overflow-y-auto">
+            <Field label="Recipient email">
+              <input
+                className={inputClass}
+                placeholder="user@gmail.com"
+                required
+                value={state.to}
+                onChange={(e) =>
+                  setState({ ...state, to: e.currentTarget.value })
+                }
+              />
+            </Field>
 
-          <Field label="Amount">
-            <input className={inputClass} placeholder="100" />
-          </Field>
+            <Field label="Amount">
+              <input
+                className={inputClass}
+                placeholder="100"
+                required
+                value={state.amount}
+                onChange={(e) =>
+                  setState({
+                    ...state,
+                    amount: Math.max(0, Number(e.currentTarget.value) || 0),
+                  })
+                }
+              />
+            </Field>
 
-          <Field label="Note (optional)">
-            <textarea
-              className={clsx(inputClass, "resize-none h-24")}
-              placeholder="Payment description"
-            />
-          </Field>
+            <Field label="Note (optional)">
+              <textarea
+                className={clsx(inputClass, "resize-none h-24")}
+                placeholder="Payment description"
+              />
+            </Field>
 
-          <div className="text-xs text-gray-400 leading-relaxed">
-            <p>• Transaction will be recorded in the ledger</p>
-            <p>• Balance is derived from ledger, not stored</p>
-            <p>• Operation is atomic and irreversible</p>
+            <div className="text-xs text-gray-400 leading-relaxed">
+              <p>• Transaction will be recorded in the ledger</p>
+              <p>• Balance is derived from ledger, not stored</p>
+              <p>• Operation is atomic and irreversible</p>
+            </div>
           </div>
-        </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-500/20 flex gap-4">
-          <button
-            onClick={onClose}
-            className="flex-1 border border-gray-500/30 text-gray-400 py-2 hover:bg-gray-500/10 transition"
-          >
-            CANCEL
-          </button>
-          <button className="flex-1 border border-emerald-500/40 text-emerald-400 py-2 hover:bg-emerald-500/10 transition">
-            EXECUTE
-          </button>
-        </div>
+          {err && (
+            <p className="text-xs text-center text-red-400 border border-red-400/30 mx-6 mb-4 py-2">
+              {err}
+            </p>
+          )}
+
+          {/* Footer */}
+          <div className="px-6 py-4 border-t border-gray-500/20 text-sm flex gap-6">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="flex-1 border border-gray-500/30 text-gray-400 py-2 hover:bg-gray-500/10 transition"
+              type="button"
+            >
+              CANCEL
+            </button>
+            <button
+              className="flex-1 border border-emerald-500/40 text-emerald-400 py-2 hover:bg-emerald-500/10 transition"
+              type="submit"
+            >
+              {isPending ? "WAIT..." : "EXECUTE"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -58,3 +58,14 @@ button {
     transform: translateX(0);
   }
 }
+
+@keyframes scan {
+  0% {
+    /* Start position: the gradient is off to the left */
+    background-position: 100% 0; 
+  }
+  100% {
+    /* End position: the gradient moves across to the right */
+    background-position: -100% 0;
+  }
+}

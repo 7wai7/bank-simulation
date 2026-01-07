@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { TransactionDTO } from "../domains/transaction/transaction.dto";
+import { TransactionDTO } from "../domains/transactions/transactions.dto";
 import { requireUser } from "../shared/utils/requireUser";
 
 export default async function Home() {
@@ -14,7 +14,18 @@ export default async function Home() {
             Your Balance
           </h2>
           <p className="text-2xl font-bold">
-            {1000} <span className="text-xs text-gray-400">TOKENS</span>
+            <span
+              className="
+                text-transparent
+                bg-clip-text
+                bg-[linear-gradient(90deg,#96c6b8_0%,#00d393,#96c6b8_100%)]
+                bg-size-[200%_100%]
+                animate-[scan_1s_linear_infinite]
+              "
+            >
+              {1000}
+            </span>{" "}
+            <span className="text-xs text-gray-400">TOKENS</span>
           </p>
         </div>
       </div>

@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "./components/Providers";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import CreateTransactionModal from "./components/CreateTransactionModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,10 @@ export default function RootLayout({
       >
         <Header />
         <main className="flex flex-col flex-1 mx-20 border-l border-r border-gray-500/20 bg-gray-950">
-          <Providers>{children}</Providers>
+          <Providers>
+            {children}
+            <CreateTransactionModal />
+          </Providers>
         </main>
         <Footer />
       </body>
