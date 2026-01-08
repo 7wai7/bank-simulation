@@ -8,4 +8,4 @@ export const createTransactionApi = async (data: TransactionRequestDTO) =>
   );
 
 export const getUserBalanceApi = async () =>
-  fetcher<{ balance: number }>(api.get("/api/transactions"));
+  fetcher<{ balance: number }>(api.get("/api/transactions/balance"));
