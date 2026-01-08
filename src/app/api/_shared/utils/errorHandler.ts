@@ -11,6 +11,7 @@ export const errorHandler =
         return await handler(req, ctx);
       } catch (e: unknown) {
         mapPrismaError(e);
+        console.log(e)
         throw e;
       }
     } catch (e) {
