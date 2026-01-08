@@ -6,7 +6,7 @@ import { transactionsService } from "@/src/domains/transactions/transactions.ser
 export const GET = errorHandler(
   authGuard(async (req) => {
     const user = req.user!;
-    const balance = await transactionsService.getUserBalance(user);
+    const balance = await transactionsService.getUserBalance(user.id);
     return NextResponse.json({ balance });
   })
 );

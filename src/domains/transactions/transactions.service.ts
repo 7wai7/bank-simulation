@@ -5,13 +5,17 @@ import { AppError } from "@/src/app/api/_shared/utils/appError";
 import { TransactionRequestSchema } from "./transactions.schemas";
 
 class TransactionsService {
-  async getUserBalance(user: UserJwtDTO) {
-    let balance;
+  async getUserBalance(userId: number) {
+    let balance = null;
+    let balanceCache = null;
 
-    const balanceCash = await redis.get(`user-balance-${user.id}`);
+    try {
+      balanceCache = await redis.get(`user-balance-${userId}`);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_) {}
 
-    if (balanceCash) balance = +balanceCash;
-    else balance = await this.aggregateUserBalance(user.id);
+    if (balanceCache) balance = +balanceCache;
+    else balance = await this.aggregateUserBalance(userId);
 
     return balance ?? 0;
   }
@@ -83,7 +87,11 @@ class TransactionsService {
     const newBalance = await this.aggregateUserBalance(user.id);
     const balance = newBalance ?? 0;
 
-    redis.set(`user-balance-${user.id}`, String(balance));
+    try {
+      await redis.set(`user-balance-${user.id}`, String(balance), "EX", 10);
+      await redis.del(`user-balance-${toUser.id}`);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_) {}
 
     return {
       transaction: newTransaction,

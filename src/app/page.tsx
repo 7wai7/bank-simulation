@@ -1,10 +1,14 @@
 import clsx from "clsx";
 import { TransactionDTO } from "../domains/transactions/transactions.dto";
 import { requireUser } from "../shared/utils/requireUser";
+import { transactionsService } from "../domains/transactions/transactions.service";
+import UserBalance from "./components/UserBalance";
 
 export default async function Home() {
   const user = await requireUser();
   const transactions: TransactionDTO[] = [];
+
+  const balance = await transactionsService.getUserBalance(user!.id);
 
   return (
     <>
@@ -13,20 +17,7 @@ export default async function Home() {
           <h2 className="text-sm font-semibold mb-2 tracking-wider">
             Your Balance
           </h2>
-          <p className="text-2xl font-bold">
-            <span
-              className="
-                text-transparent
-                bg-clip-text
-                bg-[linear-gradient(90deg,#96c6b8_0%,#00d393,#96c6b8_100%)]
-                bg-size-[200%_100%]
-                animate-[scan_1s_linear_infinite]
-              "
-            >
-              {1000}
-            </span>{" "}
-            <span className="text-xs text-gray-400">TOKENS</span>
-          </p>
+          <UserBalance initialBalance={balance} />
         </div>
       </div>
 
