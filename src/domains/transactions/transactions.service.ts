@@ -20,12 +20,24 @@ class TransactionsService {
     return balance ?? 0;
   }
 
-  async createTransaction(currentUser: UserJwtDTO, data: unknown) {
+  async getUserTransactions(userId: number) {
+    return prisma.transaction.findMany({
+      where: {
+        OR: [{ from: { id: userId } }, { to: { id: userId } }],
+      },
+      include: {
+        from: { select: { id: true, username: true, email: true } },
+        to: { select: { id: true, username: true, email: true } },
+      },
+      orderBy: { date: "desc" },
+    });
+  }
+
+  async createTransaction(user: UserJwtDTO, data: unknown) {
     const parsed = TransactionRequestSchema.safeParse(data);
     if (!parsed.success) throw new AppError(parsed.error.issues[0].message);
 
     const { to, amount } = parsed.data;
-    const user = currentUser;
 
     if (user.email === to)
       throw new AppError("You cannot send tokens to yourself", 400);

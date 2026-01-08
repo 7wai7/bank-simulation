@@ -1,27 +1,33 @@
-import { requireUser } from "@/src/shared/utils/requireUser";
+"use client";
+
 import Link from "next/link";
 import CreateTransactionButton from "./CreateTransactionButton";
+import { useAuthStore } from "@/src/domains/auth/auth.store";
 
-export default async function Header() {
-  const user = await requireUser();
+export default function Header() {
+  const user = useAuthStore((s) => s.user);
 
   return (
-    <header className="
+    <header
+      className="
       relative
       bg-linear-to-b from-gray-900 to-gray-950
       px-6 py-4
       border-b border-gray-500/20
       flex justify-between items-center
       font-mono
-    ">
+    "
+    >
       {/* Left */}
       <Link href="/" className="group">
-        <h1 className="
+        <h1
+          className="
           text-xl font-bold tracking-wider
           text-gray-300
           group-hover:text-white
           transition-colors
-        ">
+        "
+        >
           TOKEN<span className="text-gray-500">_</span>BANK
         </h1>
         <div className="text-[10px] text-gray-500 tracking-widest">
@@ -36,9 +42,7 @@ export default async function Header() {
             <div className="text-xs text-gray-500 tracking-widest">
               AUTHORIZED USER
             </div>
-            <div className="text-sm text-gray-300">
-              {user.username}
-            </div>
+            <div className="text-sm text-gray-300">{user.username}</div>
           </div>
 
           <CreateTransactionButton />

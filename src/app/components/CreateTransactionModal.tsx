@@ -33,7 +33,7 @@ export default function CreateTransactionModal() {
       return;
     }
 
-    mutate(parsed.data, { onSuccess: (data) => console.log(data) });
+    mutate(parsed.data);
   };
 
   if (!isOpen) return null;

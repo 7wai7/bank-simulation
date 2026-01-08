@@ -5,6 +5,7 @@ import Providers from "./components/Providers";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import CreateTransactionModal from "./components/CreateTransactionModal";
+import UserInitializer from "./components/UserInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,16 +30,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-black flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen bg-black flex flex-col`}
       >
-        <Header />
-        <main className="flex flex-col flex-1 mx-20 border-l border-r border-gray-500/20 bg-gray-950">
-          <Providers>
-            {children}
-            <CreateTransactionModal />
-          </Providers>
-        </main>
-        <Footer />
+        <Providers>
+          <UserInitializer>
+            <Header />
+            <main className="flex flex-col flex-1 min-h-0 mx-20 border-l border-r border-gray-500/20 bg-gray-950">
+              {children}
+              <CreateTransactionModal />
+            </main>
+            <Footer />
+          </UserInitializer>
+        </Providers>
       </body>
     </html>
   );

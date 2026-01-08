@@ -7,8 +7,8 @@ import {
   LoginRequestSchema,
   RegisterRequestSchema,
 } from "@/src/domains/auth/auth.schemas";
-import { loginApi, registerApi } from "@/src/domains/auth/auth.api";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/src/domains/auth/auth.store";
 
 type AuthFormState = RegisterRequestDTO;
 
@@ -24,6 +24,9 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  const register = useAuthStore(s => s.register);
+  const login = useAuthStore(s => s.login);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +45,7 @@ export default function AuthPage() {
 
     const dto = parsed.data as RegisterRequestDTO;
 
-    (isSignup ? registerApi : loginApi)(dto)
+    (isSignup ? register : login)(dto)
       .then(() => router.push("/"))
       .catch((e) => e instanceof Error && setError(e.message))
       .finally(() => setLoading(false));

@@ -1,0 +1,59 @@
+"use client";
+
+import { useAuthStore } from "@/src/domains/auth/auth.store";
+import { useGetUserTransactions } from "@/src/domains/transactions/transactions.hooks";
+import clsx from "clsx";
+
+export default function UserTransactionsList() {
+  const user = useAuthStore((s) => s.user);
+  const { data: transactions = [] } = useGetUserTransactions();
+
+  return (
+    <ul className="flex flex-col gap-2 overflow-y-auto h-full pr-3 pb-6">
+      {transactions.map((tx) => {
+        const isOutgoing = tx.from.id === user!.id;
+
+        return (
+          <li
+            key={tx.id}
+            className={clsx(
+              `
+              flex items-center justify-between gap-4
+              px-4 py-3 rounded-md
+              border border-gray-500/20
+              bg-black/30
+              hover:bg-gray-800/40
+              transition-colors
+              `,
+              isOutgoing
+                ? "border-l-4 border-l-red-500/60"
+                : "border-l-4 border-l-emerald-500/60"
+            )}
+          >
+            {/* LEFT */}
+            <div className="flex flex-col text-xs">
+              <span className="tracking-wide text-gray-400">
+                {isOutgoing ? "SENT TO" : "RECEIVED FROM"}
+              </span>
+              <span className="text-sm text-gray-200 truncate max-w-55">
+                {isOutgoing ? tx.to.email : tx.from.email}
+              </span>
+            </div>
+
+            {/* RIGHT */}
+            <div
+              className={clsx(
+                "text-sm font-mono tracking-wide text-right",
+                isOutgoing ? "text-red-400" : "text-emerald-400"
+              )}
+            >
+              {isOutgoing ? "-" : "+"}
+              {tx.amount}
+              <span className="ml-1 text-[10px] text-gray-400">TOKENS</span>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
