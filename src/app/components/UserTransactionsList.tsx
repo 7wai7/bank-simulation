@@ -3,10 +3,28 @@
 import { useAuthStore } from "@/src/domains/auth/auth.store";
 import { useGetUserTransactions } from "@/src/domains/transactions/transactions.hooks";
 import clsx from "clsx";
+import { useMemo } from "react";
+import { useInfiniteScroll } from "../hooks/useInfiniteScroll.hook";
 
 export default function UserTransactionsList() {
   const user = useAuthStore((s) => s.user);
-  const { data: transactions = [] } = useGetUserTransactions();
+  
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetUserTransactions();
+
+  const transactions = useMemo(
+    () => data?.pages.flatMap((p) => p) ?? [],
+    [data]
+  );
+
+  const loadMoreRef = useInfiniteScroll(
+    fetchNextPage,
+    Boolean(hasNextPage && !isFetchingNextPage)
+  );
 
   return (
     <ul className="flex flex-col gap-2 overflow-y-auto h-full pr-3 pb-6">
@@ -54,6 +72,21 @@ export default function UserTransactionsList() {
           </li>
         );
       })}
+
+      {/* Sentinel */}
+      <div ref={loadMoreRef} className="h-6" />
+
+      {isFetchingNextPage && (
+        <li className="text-xs text-gray-500 text-center py-2">
+          Loading more transactions…
+        </li>
+      )}
+
+      {!hasNextPage && transactions.length > 0 && (
+        <li className="text-xs text-gray-600 text-center py-2">
+          No more transactions
+        </li>
+      )}
     </ul>
   );
 }

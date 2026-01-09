@@ -7,8 +7,8 @@ export const createTransactionApi = async (data: TransactionRequestDTO) =>
     api.post("/api/transactions", data)
   );
 
-export const getUserTransactionsApi = async () =>
-  fetcher<TransactionDTO[]>(api.get("/api/transactions"));
+export const getUserTransactionsApi = async (cursor: string | null) =>
+  fetcher<TransactionDTO[]>(api.get(`/api/transactions?cursor=${cursor ?? ""}&limit=20`));
 
 export const getUserBalanceApi = async () =>
   fetcher<{ balance: number }>(api.get("/api/transactions/balance"));

@@ -20,7 +20,11 @@ class TransactionsService {
     return balance ?? 0;
   }
 
-  async getUserTransactions(userId: number) {
+  async getUserTransactions(
+    userId: number,
+    cursor?: { id: number },
+    limit = 20
+  ) {
     return prisma.transaction.findMany({
       where: {
         OR: [{ from: { id: userId } }, { to: { id: userId } }],
@@ -29,7 +33,10 @@ class TransactionsService {
         from: { select: { id: true, username: true, email: true } },
         to: { select: { id: true, username: true, email: true } },
       },
-      orderBy: { date: "desc" },
+      orderBy: { id: "desc" },
+      take: limit,
+      cursor,
+      skip: cursor ? 1 : 0,
     });
   }
 

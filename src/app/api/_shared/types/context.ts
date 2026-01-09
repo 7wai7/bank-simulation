@@ -1,12 +1,10 @@
 import NextRequestUser from "./nextRequestUser";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type RouteContext<P = any> = {
+export type RouteContext<P = unknown> = {
   params: Promise<P>;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Handler<P = any> = (
+export type Handler<P = unknown> = (
   req: NextRequestUser,
   ctx: RouteContext<P>
 ) => Promise<Response>;

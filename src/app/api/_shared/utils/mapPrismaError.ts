@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { AppError } from "./appError";
 
 export function mapPrismaError(e: unknown) {
+  console.error(e);
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     switch (e.code) {
       case "P2000":

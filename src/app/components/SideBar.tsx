@@ -9,13 +9,16 @@ export default function SideBar({ user }: { user: UserJwtDTO }) {
         border border-gray-500/20 bg-gray-950
       "
     >
-      <div className="flex flex-col mb-5 whitespace-nowrap">
-        <div className="text-xs text-gray-500 tracking-widest mb-3">
-          AUTHORIZED USER
+      <div>
+        <div className="text-xs text-gray-500 tracking-widest mb-2">
+          ACCOUNT
         </div>
-        <span className="text-gray-300 text-sm overflow-hidden text-ellipsis line-clamp-1">{user.username}</span>
-        <span className="text-gray-400 text-xs overflow-hidden text-ellipsis line-clamp-1">{user.email}</span>
+
+        <div className="text-sm text-gray-300 truncate">{user.username}</div>
+        <div className="text-xs text-gray-400 truncate">{user.email}</div>
       </div>
+
+      <hr className="h-0 block my-4 border-t border-gray-500/20" />
 
       <LogoutBtn />
     </section>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CreateTransactionButton from "./CreateTransactionButton";
 
 export default function Header() {
   return (
@@ -28,6 +29,8 @@ export default function Header() {
           SECURE LEDGER SIMULATION
         </div>
       </Link>
+
+      <CreateTransactionButton />
 
       {/* subtle scanline */}
       <div className="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-emerald-500/40 to-transparent" />

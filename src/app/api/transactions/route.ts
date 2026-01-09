@@ -5,8 +5,19 @@ import { transactionsService } from "@/src/domains/transactions/transactions.ser
 
 export const GET = errorHandler(
   authGuard(async (req) => {
-    const result = await transactionsService.getUserTransactions(req.user!.id);
-    return NextResponse.json(result);
+    const url = new URL(req.url);
+    const cursor = url.searchParams.get("cursor"); // останній transaction.id
+    const limit = Number(url.searchParams.get("limit") ?? 20);
+
+    const prismaCursor = cursor ? { id: Number(cursor) ?? undefined } : undefined;
+
+    const items = await transactionsService.getUserTransactions(
+      req.user!.id,
+      prismaCursor,
+      limit
+    );
+
+    return NextResponse.json(items);
   })
 );
 
