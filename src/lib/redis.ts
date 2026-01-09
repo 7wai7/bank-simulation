@@ -8,4 +8,6 @@ const redis = new Redis({
   retryStrategy: () => null,
 });
 
+redis.on("error", () => {});
+
 export default redis;

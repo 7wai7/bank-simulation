@@ -74,9 +74,11 @@ export default function CreateTransactionModal() {
           </div>
         </div>
 
+        <CurrentBalance />
+
         {/* Body */}
         <form className="flex flex-col flex-1" onSubmit={onSubmit}>
-          <div className="flex-1 px-6 py-6 space-y-6 overflow-y-auto">
+          <div className="flex-1 p-6 space-y-6 overflow-y-auto">
             <Field label="Recipient email">
               <input
                 className={inputClass}
@@ -162,6 +164,17 @@ function Field({
       </label>
       {children}
     </div>
+  );
+}
+
+function CurrentBalance() {
+  const balance = useTransactionsStore((s) => s.balance);
+  
+  return (
+    <p className="px-6 mt-6 text-xs text-gray-400 tracking-widest">
+      Current balance:{" "}
+      <span className="text-emerald-400 text-sm">{balance}</span>
+    </p>
   );
 }
 

@@ -11,7 +11,7 @@ export default function UserInitializer({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { user, setUser, me } = useAuthStore();
+  const { setUser, me } = useAuthStore();
 
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: ["current-user"],
@@ -25,8 +25,6 @@ export default function UserInitializer({
   }, [data, isSuccess, isLoading, setUser, router]);
 
   if (isLoading) return <p>Loading</p>;
-
-  if (!user) return null;
 
   return <>{children}</>;
 }
