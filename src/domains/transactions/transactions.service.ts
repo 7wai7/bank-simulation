@@ -44,7 +44,7 @@ class TransactionsService {
     const parsed = TransactionRequestSchema.safeParse(data);
     if (!parsed.success) throw new AppError(parsed.error.issues[0].message);
 
-    const { to, amount } = parsed.data;
+    const { to, amount, description } = parsed.data;
 
     if (user.email === to)
       throw new AppError("You cannot send tokens to yourself", 400);
@@ -68,13 +68,10 @@ class TransactionsService {
 
       newTransaction = await tx.transaction.create({
         data: {
-          from: {
-            connect: { id: user.id },
-          },
-          to: {
-            connect: { id: toUser.id },
-          },
+          from_id: user.id,
+          to_id: toUser.id,
           amount,
+          description,
         },
         include: {
           from: { select: { id: true, username: true, email: true } },

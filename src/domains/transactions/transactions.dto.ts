@@ -10,4 +10,5 @@ export type TransactionDTO = {
   to: UserJwtDTO;
   date: string;
   amount: number;
+  description?: string;
 };

@@ -27,9 +27,9 @@ model Transaction {
   to      User @relation(fields: [to_id], references: [id], name: "TransactionTo")
   to_id   Int
 
-  amount Int
-  // status TransactionStatus
-  date   DateTime @default(now())
+  amount      Int
+  description String?
+  date        DateTime @default(now())
 }
 
 model LedgerEntry {

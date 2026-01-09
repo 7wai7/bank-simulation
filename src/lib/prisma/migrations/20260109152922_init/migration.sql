@@ -18,6 +18,7 @@ CREATE TABLE "Transaction" (
     "from_id" INTEGER NOT NULL,
     "to_id" INTEGER NOT NULL,
     "amount" INTEGER NOT NULL,
+    "description" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")

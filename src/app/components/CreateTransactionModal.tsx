@@ -12,6 +12,7 @@ type FormState = TransactionRequestDTO;
 const initialState: FormState = {
   to: "",
   amount: 0,
+  description: "",
 };
 
 export default function CreateTransactionModal() {
@@ -27,6 +28,8 @@ export default function CreateTransactionModal() {
     setSchemaErr(null);
 
     const parsed = TransactionRequestSchema.safeParse(state);
+
+    console.log(parsed.data);
 
     if (!parsed.success) {
       setSchemaErr(parsed.error.issues[0].message);
@@ -77,8 +80,8 @@ export default function CreateTransactionModal() {
         <CurrentBalance />
 
         {/* Body */}
-        <form className="flex flex-col flex-1" onSubmit={onSubmit}>
-          <div className="flex-1 p-6 space-y-6 overflow-y-auto">
+        <form className="flex flex-col flex-1 min-h-0" onSubmit={onSubmit}>
+          <div className="flex-1 px-6 py-3 space-y-6 overflow-y-auto">
             <Field label="Recipient email">
               <input
                 className={inputClass}
@@ -110,6 +113,13 @@ export default function CreateTransactionModal() {
               <textarea
                 className={clsx(inputClass, "resize-none h-24")}
                 placeholder="Payment description"
+                value={state.description}
+                onChange={(e) =>
+                  setState({
+                    ...state,
+                    description: e.currentTarget.value,
+                  })
+                }
               />
             </Field>
 
@@ -121,7 +131,7 @@ export default function CreateTransactionModal() {
           </div>
 
           {err && (
-            <p className="text-xs text-center text-red-400 border border-red-400/30 mx-6 mb-4 py-2">
+            <p className="text-xs text-center text-red-400 border border-red-400/30 mx-6 mt-3 mb-4 py-2">
               {err}
             </p>
           )}
@@ -169,9 +179,9 @@ function Field({
 
 function CurrentBalance() {
   const balance = useTransactionsStore((s) => s.balance);
-  
+
   return (
-    <p className="px-6 mt-6 text-xs text-gray-400 tracking-widest">
+    <p className="px-6 mt-6 mb-3 text-xs text-gray-400 tracking-widest">
       Current balance:{" "}
       <span className="text-emerald-400 text-sm">{balance}</span>
     </p>
