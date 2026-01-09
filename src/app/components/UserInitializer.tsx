@@ -1,30 +1,21 @@
 "use client";
 
 import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/src/domains/auth/auth.store";
+import { UserJwtDTO } from "@/src/domains/auth/auth.dto";
 
 export default function UserInitializer({
+  user,
   children,
 }: {
+  user: UserJwtDTO;
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-  const { setUser, me } = useAuthStore();
-
-  const { data, isLoading, isSuccess } = useQuery({
-    queryKey: ["current-user"],
-    queryFn: me,
-    retry: false,
-  });
+  const setUser = useAuthStore((s) => s.setUser);
 
   useEffect(() => {
-    if (isSuccess && data) setUser(data);
-    if (!isLoading && !data) router.replace("/auth");
-  }, [data, isSuccess, isLoading, setUser, router]);
-
-  if (isLoading) return <p>Loading</p>;
+    setUser(user);
+  }, [setUser, user]);
 
   return <>{children}</>;
 }

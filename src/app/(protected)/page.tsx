@@ -1,13 +1,11 @@
-import { requireUser } from "../shared/utils/requireUser";
-import { transactionsService } from "../domains/transactions/transactions.service";
-import UserBalance from "./components/UserBalance";
-import UserTransactionsList from "./components/UserTransactionsList";
-import { redirect } from "next/navigation";
+import { transactionsService } from "@/src/domains/transactions/transactions.service";
+import { requireUser } from "@/src/shared/utils/requireUser";
+import UserBalance from "../components/UserBalance";
+import UserTransactionsList from "../components/UserTransactionsList";
 
 export default async function Home() {
-  const user = await requireUser();
-  if (!user) redirect("/auth");
-  const balance = await transactionsService.getUserBalance(user.id); // Одразу показати баланс при першому рендері
+  const user = await requireUser(); // Получити користувача через jwt
+  const balance = await transactionsService.getUserBalance(user!.id); // Одразу показати баланс при першому рендері
 
   return (
     <>
