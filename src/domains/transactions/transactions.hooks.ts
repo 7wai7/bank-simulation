@@ -14,6 +14,7 @@ export function useCreateTransaction() {
     mutationFn: createTransactionApi,
     onSuccess: (data) => {
       useTransactionsStore.getState().setBalance(data.balance);
+      useTransactionsStore.getState().setIsOpenModal(false);
       qc.setQueryData<TransactionDTO[]>(["user-transactions"], (prev) =>
         prev ? [data.transaction, ...prev] : [data.transaction]
       );
