@@ -4,17 +4,21 @@ import { useTransactionsStore } from "@/src/domains/transactions/transactions.st
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
-  initialBalance?: number;
+  initialBalance: number;
 }
 
-export default function UserBalance({ initialBalance = 0 }: Props) {
-  const targetBalance =
-    useTransactionsStore((s) => s.balance) ?? initialBalance;
+export default function UserBalance({ initialBalance }: Props) {
+  const storeBalance = useTransactionsStore((s) => s.balance);
+  const targetBalance = !storeBalance ? initialBalance : storeBalance;
 
   const [displayBalance, setDisplayBalance] = useState(targetBalance);
 
   const rafRef = useRef<number | null>(null);
   const previousBalanceRef = useRef(targetBalance);
+
+  useEffect(() => {
+    useTransactionsStore.setState({ balance: initialBalance });
+  }, [initialBalance]);
 
   useEffect(() => {
     const start = previousBalanceRef.current;
@@ -59,7 +63,7 @@ export default function UserBalance({ initialBalance = 0 }: Props) {
           animate-[scan_1.2s_linear_infinite]
         "
       >
-        {displayBalance.toLocaleString()}
+        {displayBalance.toLocaleString("uk-UA")}
       </span>
       <span className="ml-1 text-xs text-gray-400">TOKENS</span>
     </p>

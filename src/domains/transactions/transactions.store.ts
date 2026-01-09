@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 type State = {
-  balance: number | null;
+  balance?: number;
   setBalance: (value: number) => void;
 
   isOpenModal: boolean;
@@ -9,7 +9,6 @@ type State = {
 };
 
 export const useTransactionsStore = create<State>((set) => ({
-  balance: null,
   setBalance: (value) => set({ balance: value }),
 
   isOpenModal: false,

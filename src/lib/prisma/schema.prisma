@@ -28,7 +28,7 @@ model Transaction {
   to_id   Int
 
   amount Int
-  status TransactionStatus
+  // status TransactionStatus
   date   DateTime @default(now())
 }
 

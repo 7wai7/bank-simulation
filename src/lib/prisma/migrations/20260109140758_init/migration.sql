@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "TransactionStatus" AS ENUM ('SUCCESS', 'FAILED');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
