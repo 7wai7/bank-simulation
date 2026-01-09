@@ -1,3 +1,5 @@
+"use client";
+
 import { logout } from "../actions/logout";
 
 export default function LogoutBtn() {
@@ -5,7 +7,7 @@ export default function LogoutBtn() {
     <button
       onClick={() => logout()}
       className="
-        px-3 py-1
+        px-3 py-1 w-full
         border border-emerald-500/40
         text-emerald-400 text-xs tracking-widest
         hover:bg-emerald-500/10

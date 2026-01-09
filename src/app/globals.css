@@ -12,6 +12,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@layer base {
+  .page {
+    @apply flex flex-col h-full flex-1 min-h-0 mx-20 border-l border-r border-gray-500/20 bg-gray-950;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -62,7 +68,7 @@ button {
 @keyframes scan {
   0% {
     /* Start position: the gradient is off to the left */
-    background-position: 100% 0; 
+    background-position: 100% 0;
   }
   100% {
     /* End position: the gradient moves across to the right */

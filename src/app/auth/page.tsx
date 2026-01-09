@@ -25,8 +25,8 @@ export default function AuthPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const register = useAuthStore(s => s.register);
-  const login = useAuthStore(s => s.login);
+  const register = useAuthStore((s) => s.register);
+  const login = useAuthStore((s) => s.login);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +58,7 @@ export default function AuthPage() {
     !!state.password.trim();
 
   return (
-    <>
+    <main className="page">
       <div className="w-full m-auto max-w-md border border-gray-500/20">
         {/* Title */}
         <div className="px-6 py-4 border-b border-gray-500/20">
@@ -147,6 +147,6 @@ export default function AuthPage() {
           </button>
         </div>
       </div>
-    </>
+    </main>
   );
 }
