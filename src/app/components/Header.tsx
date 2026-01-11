@@ -1,5 +1,5 @@
 import Link from "next/link";
-import CreateTransactionButton from "./CreateTransactionButton";
+import HeaderActions from "./HeaderActions";
 
 export default function Header() {
   return (
@@ -30,10 +30,11 @@ export default function Header() {
         </div>
       </Link>
 
-      <CreateTransactionButton />
+      <HeaderActions />
 
       {/* subtle scanline */}
       <div className="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-emerald-500/40 to-transparent" />
     </header>
   );
 }
+
