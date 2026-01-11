@@ -20,7 +20,7 @@ export default function UserTransactionsList() {
   );
 
   return (
-    <ul className="flex flex-col gap-2 overflow-y-auto h-full pr-3 pb-6">
+    <ul className="flex flex-col gap-3 overflow-y-auto h-full pr-3 pb-6">
       {transactions.map((tx) => {
         const isOutgoing = tx.from.id === user!.id;
 
@@ -50,7 +50,7 @@ export default function UserTransactionsList() {
                 {isOutgoing ? tx.to.email : tx.from.email}
               </span>
             </div>
-            <p className="text-xs text-gray-300 truncate">{tx.description}</p>
+            <p className="text-xs text-gray-300 truncate">{tx.description ?? "-"}</p>
 
             <div
               className={clsx(

@@ -29,8 +29,6 @@ export default function CreateTransactionModal() {
 
     const parsed = TransactionRequestSchema.safeParse(state);
 
-    console.log(parsed.data);
-
     if (!parsed.success) {
       setSchemaErr(parsed.error.issues[0].message);
       return;
