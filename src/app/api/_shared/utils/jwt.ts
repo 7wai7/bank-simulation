@@ -1,8 +1,8 @@
 import { env } from "@/src/shared/config/env";
-import { UserJwtDTO } from "@/src/domains/auth/auth.dto";
+import { UserDTO } from "@/src/domains/auth/auth.dto";
 import jwt, { SignOptions } from "jsonwebtoken";
 
-export function signToken(user: UserJwtDTO) {
+export function signToken(user: UserDTO) {
   const options: SignOptions = {};
 
   if (env.JWT_EXPIRES_IN) {

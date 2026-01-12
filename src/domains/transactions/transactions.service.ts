@@ -1,5 +1,5 @@
 import redis from "@/src/lib/redis";
-import { UserJwtDTO } from "../auth/auth.dto";
+import { UserDTO } from "../auth/auth.dto";
 import { prisma } from "@/src/lib/prisma";
 import { AppError } from "@/src/app/api/_shared/utils/appError";
 import { TransactionRequestSchema } from "./transactions.schemas";
@@ -41,7 +41,7 @@ class TransactionsService {
     });
   }
 
-  async createTransaction(user: UserJwtDTO, data: TransactionRequestDTO) {
+  async createTransaction(user: UserDTO, data: TransactionRequestDTO) {
     const parsed = TransactionRequestSchema.safeParse(data);
     if (!parsed.success) throw new AppError(parsed.error.issues[0].message);
 

@@ -1,15 +1,15 @@
 import { create } from "zustand";
-import { LoginRequestDTO, RegisterRequestDTO, UserJwtDTO } from "./auth.dto";
+import { LoginRequestDTO, RegisterRequestDTO, UserDTO } from "./auth.dto";
 import { loginApi, logoutApi, meApi, registerApi } from "./auth.api";
 
 type State = {
-  user: UserJwtDTO | null;
-  setUser: (user: UserJwtDTO) => void;
+  user: UserDTO | null;
+  setUser: (user: UserDTO) => void;
 
-  register: (data: RegisterRequestDTO) => Promise<UserJwtDTO>;
-  login: (data: LoginRequestDTO) => Promise<UserJwtDTO>;
+  register: (data: RegisterRequestDTO) => Promise<UserDTO>;
+  login: (data: LoginRequestDTO) => Promise<UserDTO>;
   logout: () => void;
-  me: () => Promise<UserJwtDTO>;
+  me: () => Promise<UserDTO>;
 };
 
 export const useAuthStore = create<State>((set) => ({

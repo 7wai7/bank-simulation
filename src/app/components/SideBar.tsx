@@ -1,7 +1,7 @@
 import LogoutBtn from "./LogoutBtn";
-import { UserJwtDTO } from "@/src/domains/auth/auth.dto";
+import { UserDTO } from "@/src/domains/auth/auth.dto";
 
-export default function SideBar({ user }: { user: UserJwtDTO }) {
+export default function SideBar({ user }: { user: UserDTO }) {
   return (
     <section
       className="

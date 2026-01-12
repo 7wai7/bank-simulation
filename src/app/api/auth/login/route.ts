@@ -6,7 +6,7 @@ import { saveCookieSession } from "../../_shared/utils/saveCookieSession";
 export const POST = errorHandler(async (req: NextRequest) => {
   const data = await req.json();
   const [session, raw] = await authService.login(req, data);
-    const res = NextResponse.json(session.user);
-    saveCookieSession(res, raw, session);
-    return res;
+  const res = NextResponse.json(session.user);
+  saveCookieSession(res, raw, session);
+  return res;
 });

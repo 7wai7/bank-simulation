@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useAuthStore } from "@/src/domains/auth/auth.store";
-import { UserJwtDTO } from "@/src/domains/auth/auth.dto";
+import { UserDTO } from "@/src/domains/auth/auth.dto";
 import { useTransactionsStore } from "@/src/domains/transactions/transactions.store";
 
 export default function UserInitializer({
@@ -10,7 +10,7 @@ export default function UserInitializer({
   initialBalance,
   children,
 }: {
-  user: UserJwtDTO;
+  user: UserDTO;
   initialBalance: number;
   children: React.ReactNode;
 }) {
