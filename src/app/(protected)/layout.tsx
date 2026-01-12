@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import UserInitializer from "../components/UserInitializer";
-import CreateTransactionModal from "../components/CreateTransactionModal";
+import CreateTransactionModal from "../components/transaction modal/CreateTransactionModal";
 import { transactionsService } from "@/src/domains/transactions/transactions.service";
 import SideBar from "../components/SideBar";
 import { requireUserSessionSafe } from "@/src/shared/utils/requireUserSession";

@@ -63,7 +63,7 @@ export default function UserTransactionsList() {
                     {isOutgoing ? tx.to.email : tx.from.email}
                   </span>
                 </div>
-                <p className="text-xs text-gray-300 truncate">
+                <p className="text-sm text-gray-300 truncate">
                   {tx.description ?? "-"}
                 </p>
 

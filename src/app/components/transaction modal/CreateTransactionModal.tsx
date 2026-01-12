@@ -1,45 +1,26 @@
 "use client";
 
-import { TransactionRequestDTO } from "@/src/domains/transactions/transactions.dto";
-import { useCreateTransaction } from "@/src/domains/transactions/transactions.hooks";
-import { TransactionRequestSchema } from "@/src/domains/transactions/transactions.schemas";
-import { useTransactionsStore } from "@/src/domains/transactions/transactions.store";
 import clsx from "clsx";
-import { useState } from "react";
-
-type FormState = TransactionRequestDTO;
-
-const initialState: FormState = {
-  to: "",
-  amount: 0,
-  description: "",
-};
+import useTransactionModal from "../../hooks/useTransactionModal.hook";
+import UsersListTip from "../UsersListTip";
+import Field from "./Field";
+import CurrentBalance from "./CurrentBalance";
+import { useRef, useState } from "react";
+import { UserDTO } from "@/src/domains/auth/auth.dto";
 
 export default function CreateTransactionModal() {
-  const isOpen = useTransactionsStore((s) => s.isOpenModal);
-  const setIsOpen = useTransactionsStore((s) => s.setIsOpenModal);
+  const { isOpen, setIsOpen, state, setState, onSubmit, isPending, error } =
+    useTransactionModal();
 
-  const [state, setState] = useState<FormState>(initialState);
-  const { error, mutate, isPending } = useCreateTransaction();
-  const [schemaErr, setSchemaErr] = useState<string | null>(null);
+  const emailInputRef = useRef<HTMLInputElement | null>(null);
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSchemaErr(null);
-
-    const parsed = TransactionRequestSchema.safeParse(state);
-
-    if (!parsed.success) {
-      setSchemaErr(parsed.error.issues[0].message);
-      return;
-    }
-
-    mutate(parsed.data);
+  const onUseUser = (user: UserDTO) => {
+    setState({ ...state, to: user.email });
+    setIsEmailFocused(false);
   };
 
   if (!isOpen) return null;
-
-  const err = error?.message ?? schemaErr;
 
   return (
     <div className="fixed inset-0 z-50 font-mono">
@@ -81,15 +62,27 @@ export default function CreateTransactionModal() {
         <form className="flex flex-col flex-1 min-h-0" onSubmit={onSubmit}>
           <div className="flex-1 px-6 py-3 space-y-6 overflow-y-auto">
             <Field label="Recipient email">
-              <input
-                className={inputClass}
-                placeholder="user@gmail.com"
-                required
-                value={state.to}
-                onChange={(e) =>
-                  setState({ ...state, to: e.currentTarget.value })
-                }
-              />
+              <UsersListTip
+                email={state.to}
+                onUseUser={onUseUser}
+                isOpen={isEmailFocused}
+              >
+                <input
+                  ref={emailInputRef}
+                  className={inputClass}
+                  onFocus={() => setIsEmailFocused(true)}
+                  onBlur={(e) => {
+                    if (!e.relatedTarget?.closest("[data-users-list]"))
+                      setIsEmailFocused(false);
+                  }}
+                  placeholder="user@gmail.com"
+                  required
+                  value={state.to}
+                  onChange={(e) =>
+                    setState({ ...state, to: e.currentTarget.value })
+                  }
+                />
+              </UsersListTip>
             </Field>
 
             <Field label="Amount">
@@ -128,9 +121,9 @@ export default function CreateTransactionModal() {
             </div>
           </div>
 
-          {err && (
+          {error && (
             <p className="text-xs text-center text-red-400 border border-red-400/30 mx-6 mt-3 mb-4 py-2">
-              {err}
+              {error}
             </p>
           )}
 
@@ -153,36 +146,6 @@ export default function CreateTransactionModal() {
         </form>
       </div>
     </div>
-  );
-}
-
-/* helpers */
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <label className="block text-xs text-gray-400 tracking-widest mb-1">
-        {label}
-      </label>
-      {children}
-    </div>
-  );
-}
-
-function CurrentBalance() {
-  const balance = useTransactionsStore((s) => s.balance);
-
-  return (
-    <p className="px-6 mt-6 mb-3 text-xs text-gray-400 tracking-widest">
-      Current balance:{" "}
-      <span className="text-emerald-400 text-sm">{balance}</span>
-    </p>
   );
 }
 
