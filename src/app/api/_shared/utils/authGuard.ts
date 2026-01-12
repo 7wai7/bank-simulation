@@ -1,13 +1,11 @@
-import { AppError } from "./appError";
 import { Handler } from "../types/context";
-import { requireUser } from "@/src/shared/utils/requireUser";
+import { requireUserSession } from "@/src/shared/utils/requireUserSession";
 
 export const authGuard =
   (handler: Handler): Handler =>
   async (req, ctx) => {
-    const user = await requireUser();
-    if (!user) throw new AppError("Unauthorized", 401);
+    const session = await requireUserSession();
 
-    req.user = user;
+    req.user = session.user;
     return handler(req, ctx);
   };

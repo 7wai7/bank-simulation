@@ -1,17 +1,18 @@
-import { requireUser } from "@/src/shared/utils/requireUser";
 import { redirect } from "next/navigation";
 import UserInitializer from "../components/UserInitializer";
 import CreateTransactionModal from "../components/CreateTransactionModal";
 import { transactionsService } from "@/src/domains/transactions/transactions.service";
 import SideBar from "../components/SideBar";
+import { requireUserSessionSafe } from "@/src/shared/utils/requireUserSession";
 
 export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await requireUser();
-  if (!user) redirect("/auth");
+  const result = await requireUserSessionSafe();
+  if (!result.session) redirect("/auth");
+  const user = result.session.user;
 
   const balance = await transactionsService.getUserBalance(user.id);
 

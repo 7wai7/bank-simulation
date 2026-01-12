@@ -1,15 +1,12 @@
-import { AuthService } from "@/src/domains/auth/auth.service";
-import { NextResponse } from "next/server";
-import { saveCookieToken } from "../../_shared/utils/saveCookieToken";
+import { authService } from "@/src/domains/auth/auth.service";
+import { NextRequest, NextResponse } from "next/server";
 import { errorHandler } from "@/src/app/api/_shared/utils/errorHandler";
+import { saveCookieSession } from "../../_shared/utils/saveCookieSession";
 
-export const POST = errorHandler(async (req: Request) => {
-  const { username, email, password } = await req.json();
-
-  const { user, token } = await AuthService.register(username, email, password);
-
-  const res = NextResponse.json(user);
-  saveCookieToken(res, token);
-
+export const POST = errorHandler(async (req: NextRequest) => {
+  const data = await req.json();
+  const [session, raw] = await authService.register(req, data);
+  const res = NextResponse.json(session.user);
+  saveCookieSession(res, raw, session);
   return res;
 });

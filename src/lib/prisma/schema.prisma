@@ -16,7 +16,23 @@ model User {
   sentTransactions     Transaction[] @relation("TransactionFrom")
   receivedTransactions Transaction[] @relation("TransactionTo")
 
-  ledger LedgerEntry[]
+  ledger   LedgerEntry[]
+  sessions Session[]
+}
+
+model Session {
+  id        String @id @default(uuid())
+  tokenHash String @unique
+
+  user_id Int
+  user    User @relation(fields: [user_id], references: [id])
+
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  revokedAt DateTime?
+
+  ip        String?
+  userAgent String?
 }
 
 model Transaction {

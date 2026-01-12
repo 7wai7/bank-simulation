@@ -3,6 +3,7 @@ import { UserJwtDTO } from "../auth/auth.dto";
 import { prisma } from "@/src/lib/prisma";
 import { AppError } from "@/src/app/api/_shared/utils/appError";
 import { TransactionRequestSchema } from "./transactions.schemas";
+import { TransactionRequestDTO } from "./transactions.dto";
 
 class TransactionsService {
   async getUserBalance(userId: number) {
@@ -40,7 +41,7 @@ class TransactionsService {
     });
   }
 
-  async createTransaction(user: UserJwtDTO, data: unknown) {
+  async createTransaction(user: UserJwtDTO, data: TransactionRequestDTO) {
     const parsed = TransactionRequestSchema.safeParse(data);
     if (!parsed.success) throw new AppError(parsed.error.issues[0].message);
 
