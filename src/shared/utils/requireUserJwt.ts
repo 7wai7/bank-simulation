@@ -3,7 +3,7 @@ import { verify } from "jsonwebtoken";
 import { env } from "@/src/shared/config/env";
 import { UserJwtDTO } from "@/src/domains/auth/auth.dto";
 
-export async function requireUser() {
+export async function requireUserJwt() {
   const token = (await cookies()).get("token")?.value;
   if (!token) return null;
 

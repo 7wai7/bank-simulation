@@ -1,7 +1,9 @@
+import { UserJwtDTO } from "@/src/domains/auth/auth.dto";
 import NextRequestUser from "./nextRequestUser";
 
 export type RouteContext<P = unknown> = {
   params: Promise<P>;
+  user?: UserJwtDTO
 };
 
 export type Handler<P = unknown> = (
