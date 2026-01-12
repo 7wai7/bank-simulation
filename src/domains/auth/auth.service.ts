@@ -1,20 +1,18 @@
+import { addSeconds } from "@/src/app/api/_shared/utils/date";
+import { getClientIp } from "@/src/app/api/_shared/utils/getClientIp";
+import { prisma } from "@/src/lib/prisma";
+import { env } from "@/src/shared/config/env";
+import { requireUserSessionSafe } from "@/src/shared/utils/requireUserSession";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import { prisma } from "@/src/lib/prisma";
+import { NextRequest } from "next/server";
 import { AppError } from "../../app/api/_shared/utils/appError";
 import {
   LoginRequestDTO,
   RegisterRequestDTO,
-  SessionDTO,
-  UserJwtDTO,
+  SessionDTO
 } from "./auth.dto";
-import { NextRequest, NextResponse } from "next/server";
-import { getClientIp } from "@/src/app/api/_shared/utils/getClientIp";
 import { LoginRequestSchema, RegisterRequestSchema } from "./auth.schemas";
-import { saveCookieSession } from "@/src/app/api/_shared/utils/saveCookieSession";
-import { requireUserSessionSafe } from "@/src/shared/utils/requireUserSession";
-import { addSeconds } from "@/src/app/api/_shared/utils/date";
-import { env } from "@/src/shared/config/env";
 
 class AuthService {
   async register(req: NextRequest, data: RegisterRequestDTO) {
@@ -32,7 +30,7 @@ class AuthService {
       data: { username, email, hash_password: hash },
     });
 
-    return this.createAndSaveSession(req, user);
+    return await this.createSession(req, user.id);
   }
 
   async login(req: NextRequest, data: LoginRequestDTO) {
@@ -49,7 +47,7 @@ class AuthService {
     if (!ok) throw new AppError("Invalid password", 400);
 
     await this.revokeCurrentSession();
-    return this.createAndSaveSession(req, user);
+    return await this.createSession(req, user.id);
   }
 
   // TODO:
@@ -71,7 +69,7 @@ class AuthService {
     });
 
     await this.revokeCurrentSession();
-    return this.createAndSaveSession(req, user);
+    return await this.createSession(req, user.id);
   }
 
   async createSession(
@@ -105,18 +103,6 @@ class AuthService {
         data: { revokedAt: new Date() },
       });
     }
-  }
-
-  async createAndSaveSession(req: NextRequest, user: UserJwtDTO) {
-    const userData = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-    };
-    const [session, raw] = await this.createSession(req, user.id);
-    const res = NextResponse.json(userData);
-    saveCookieSession(res, raw, session);
-    return res;
   }
 }
 
