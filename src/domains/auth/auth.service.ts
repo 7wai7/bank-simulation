@@ -16,7 +16,7 @@ import { requireUserSessionSafe } from "@/src/shared/utils/requireUserSession";
 import { addSeconds } from "@/src/app/api/_shared/utils/date";
 import { env } from "@/src/shared/config/env";
 
-export const AuthService = {
+class AuthService {
   async register(req: NextRequest, data: RegisterRequestDTO) {
     const parsed = RegisterRequestSchema.safeParse(data);
     if (!parsed.success)
@@ -33,7 +33,7 @@ export const AuthService = {
     });
 
     return this.createAndSaveSession(req, user);
-  },
+  }
 
   async login(req: NextRequest, data: LoginRequestDTO) {
     const parsed = LoginRequestSchema.safeParse(data);
@@ -50,7 +50,7 @@ export const AuthService = {
 
     await this.revokeCurrentSession();
     return this.createAndSaveSession(req, user);
-  },
+  }
 
   // TODO:
   // will start working soon
@@ -72,7 +72,7 @@ export const AuthService = {
 
     await this.revokeCurrentSession();
     return this.createAndSaveSession(req, user);
-  },
+  }
 
   async createSession(
     req: NextRequest,
@@ -95,7 +95,7 @@ export const AuthService = {
     });
 
     return [session, raw];
-  },
+  }
 
   async revokeCurrentSession() {
     const existSession = await requireUserSessionSafe();
@@ -105,7 +105,7 @@ export const AuthService = {
         data: { revokedAt: new Date() },
       });
     }
-  },
+  }
 
   async createAndSaveSession(req: NextRequest, user: UserJwtDTO) {
     const userData = {
@@ -117,5 +117,7 @@ export const AuthService = {
     const res = NextResponse.json(userData);
     saveCookieSession(res, raw, session);
     return res;
-  },
-};
+  }
+}
+
+export const authService = new AuthService();
