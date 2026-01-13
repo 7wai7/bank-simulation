@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import AuthForm from "../../components/auth/AuthForm";
 import AuthField from "../../components/auth/AuthField";
@@ -12,6 +12,7 @@ export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
   const { mutate, isPending, error } = useResetPasswordConfirm();
   const [err, setError] = useState<string | null>(null);
+  const router = useRouter();
   const { token } = useParams();
 
   const onSubmit = (e: FormEvent) => {
@@ -40,32 +41,33 @@ export default function ResetPasswordPage() {
       return;
     }
 
-    mutate({ token: parseResult.data, password: parsePassword.data.password });
+    mutate(
+      { token: parseResult.data, password: parsePassword.data.password },
+      { onSuccess: () => router.replace("/auth") }
+    );
   };
 
   const canSubmit = !isPending && !!password.trim();
   const submitText = isPending ? "PENDING..." : "CHANGE PASSWORD";
 
   return (
-    <main className="page bg-background border-none">
-      <AuthForm
-        title="CHANGE PASSWORD"
-        subTitle="Enter your new password to continue"
-        canSubmit={canSubmit}
-        submitText={submitText}
-        error={error?.message ?? err}
-        onSubmit={onSubmit}
-      >
-        <AuthField label="PASSWORD">
-          <input
-            value={password}
-            onChange={(e) => setPassword(e.currentTarget.value)}
-            type="password"
-            required
-            className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
-          />
-        </AuthField>
-      </AuthForm>
-    </main>
+    <AuthForm
+      title="CHANGE PASSWORD"
+      subTitle="Enter your new password to continue"
+      canSubmit={canSubmit}
+      submitText={submitText}
+      error={error?.message ?? err}
+      onSubmit={onSubmit}
+    >
+      <AuthField label="PASSWORD">
+        <input
+          value={password}
+          onChange={(e) => setPassword(e.currentTarget.value)}
+          type="password"
+          required
+          className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
+        />
+      </AuthField>
+    </AuthForm>
   );
 }

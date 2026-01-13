@@ -23,7 +23,7 @@ export default function UserTransactionsList() {
     <ul className="flex flex-col gap-3 overflow-y-auto h-full pr-3 pb-6">
       {transactions ? (
         transactions.length === 0 ? (
-          <div className="flex flex-1 items-center justify-center text-center text-sm tracking-wide border border-dashed border-gray-500/20 rounded-md py-10">
+          <div className="flex flex-1 items-center justify-center text-center text-sm tracking-wide py-10">
             <div>
               <p className="uppercase text-xs tracking-widest text-gray-500 mb-1">
                 No transactions recorded

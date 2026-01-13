@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import clsx from "clsx";
 import { RegisterRequestDTO } from "../../domains/auth/auth.dto";
 import {
   LoginRequestSchema,
