@@ -11,7 +11,9 @@ export const POST = errorHandler(async (req) => {
       ...data,
       origin: url.origin,
     });
-  } catch (_: unknown) {}
+  } catch (e: unknown) {
+    console.error(e);
+  }
 
   return NextResponse.json({}); // завжди повертати status 200
 });

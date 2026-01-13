@@ -8,19 +8,15 @@ import {
   Section,
 } from "@react-email/components";
 
-type LoginConfirmationEmailProps = {
+export type ResetPasswordEmailProps = {
   username: string;
-  confirmUrl: string;
-  ip?: string | null;
-  userAgent?: string | null;
+  url: string;
 };
 
-export function LoginConfirmationEmail({
+export function ResetPasswordEmail({
   username,
-  confirmUrl,
-  ip,
-  userAgent,
-}: LoginConfirmationEmailProps) {
+  url,
+}: ResetPasswordEmailProps) {
   return (
     <Html>
       <Body
@@ -50,23 +46,25 @@ export function LoginConfirmationEmail({
               marginBottom: "12px",
             }}
           >
-            New login attempt
+            Reset Your Password
           </Text>
 
+          {/* Greeting */}
           <Text style={{ fontSize: "14px", lineHeight: "1.6" }}>
             Hello <strong>{username}</strong>,
           </Text>
 
-          <Text style={{ fontSize: "14px", lineHeight: "1.6" }}>
-            We detected a login attempt to your account.
+          {/* Instruction */}
+          <Text style={{ fontSize: "14px", lineHeight: "1.6", marginTop: "8px" }}>
+            We received a request to reset your password for your Token Bank account.
             <br />
-            Please confirm this login to continue.
+            Click the button below to set a new password. This link will expire in 15 minutes.
           </Text>
 
           {/* CTA */}
           <Section style={{ marginTop: "20px", marginBottom: "20px" }}>
             <Button
-              href={confirmUrl}
+              href={url}
               style={{
                 backgroundColor: "#2563eb",
                 color: "#ffffff",
@@ -78,24 +76,12 @@ export function LoginConfirmationEmail({
                 display: "inline-block",
               }}
             >
-              Confirm login
+              Reset Password
             </Button>
           </Section>
 
+          {/* Note */}
           <Hr style={{ borderColor: "#1f2933", margin: "24px 0" }} />
-
-          {/* Metadata */}
-          <Text
-            style={{
-              fontSize: "12px",
-              color: "#9ca3af",
-              lineHeight: "1.5",
-            }}
-          >
-            IP address: {ip ?? "Unknown"}
-            <br />
-            Device: {userAgent ?? "Unknown"}
-          </Text>
 
           <Text
             style={{
@@ -105,9 +91,9 @@ export function LoginConfirmationEmail({
               marginTop: "16px",
             }}
           >
-            If this wasn’t you, you can safely ignore this email.
+            If you didn’t request a password reset, you can safely ignore this email.
             <br />
-            The login attempt will be automatically rejected.
+            Your password will remain unchanged.
           </Text>
 
           {/* Footer */}

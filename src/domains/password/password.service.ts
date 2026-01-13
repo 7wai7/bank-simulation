@@ -6,6 +6,7 @@ import { NextRequest } from "next/server";
 import { AppError } from "../../app/api/_shared/utils/appError";
 import { RegisterRequestSchema } from "../auth/auth.schemas";
 import { authService } from "../auth/auth.service";
+import { mailService } from "../mail/mail.service";
 
 class PasswordService {
   async sendMailToResetPassword({
@@ -15,9 +16,17 @@ class PasswordService {
     email: string;
     origin: string;
   }) {
-    const link = this.resetPasswordRequire(email);
+    const { link, username, parsedEmail } =
+      await this.resetPasswordRequire(email);
     const fullLink = origin + link;
-    console.log(fullLink);
+    console.log("fullLink", fullLink);
+
+    await mailService.sendResetPasswordMail({
+      username,
+      to: parsedEmail,
+      url: fullLink,
+      subject: "Reset password",
+    });
   }
 
   async resetPasswordRequire(email: string) {
@@ -47,8 +56,8 @@ class PasswordService {
       },
     });
 
-    const link = `/reset-password?token=${rawToken}`;
-    return link;
+    const link = `/reset-password/${rawToken}`;
+    return { link, username: user.username, parsedEmail };
   }
 
   // TODO:

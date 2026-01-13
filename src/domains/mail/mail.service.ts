@@ -1,21 +1,22 @@
-import { renderLoginEmail } from "@/src/emails/renderLoginEmail";
+import { renderResetPasswordEmail } from "@/src/emails/renderResetPasswordEmail";
+import { ResetPasswordEmailProps } from "@/src/emails/ResetPasswordEmail";
 import { env } from "@/src/shared/config/env";
 import { Resend } from "resend";
 
 class MailService {
-  resend = new Resend(env.RESEND_API);
+  private resend = new Resend(env.RESEND_API);
 
-  async sendMail() {
-    console.log("send mail");
-    const html = await renderLoginEmail({
-      username: "username",
-      confirmUrl: "url",
-    });
+  async sendResetPasswordMail(
+    data: { to: string; subject: string } & ResetPasswordEmailProps
+  ) {
+    const html = await renderResetPasswordEmail(data);
+
+    const { to, subject } = data;
 
     await this.resend.emails.send({
       from: "onboarding@resend.dev",
-      to: "nazarkalataluk@gmail.com",
-      subject: "Hello user",
+      to,
+      subject,
       html,
     });
   }
