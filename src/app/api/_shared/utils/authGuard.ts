@@ -6,6 +6,6 @@ export const authGuard =
   async (req, ctx) => {
     const session = await requireUserSession();
 
-    req.user = session.user;
+    ctx.user = session.user;
     return handler(req, ctx);
   };

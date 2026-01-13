@@ -4,8 +4,8 @@ import { authGuard } from "../../_shared/utils/authGuard";
 import { transactionsService } from "@/src/domains/transactions/transactions.service";
 
 export const GET = errorHandler(
-  authGuard(async (req) => {
-    const user = req.user!;
+  authGuard(async (_, ctx) => {
+    const user = ctx.user!;
     const balance = await transactionsService.getUserBalance(user.id);
     return NextResponse.json({ balance });
   })

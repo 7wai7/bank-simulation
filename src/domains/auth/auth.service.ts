@@ -7,11 +7,7 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { NextRequest } from "next/server";
 import { AppError } from "../../app/api/_shared/utils/appError";
-import {
-  LoginRequestDTO,
-  RegisterRequestDTO,
-  SessionDTO
-} from "./auth.dto";
+import { LoginRequestDTO, RegisterRequestDTO, SessionDTO } from "./auth.dto";
 import { LoginRequestSchema, RegisterRequestSchema } from "./auth.schemas";
 
 class AuthService {
@@ -45,28 +41,6 @@ class AuthService {
 
     const ok = await bcrypt.compare(password, user.hash_password);
     if (!ok) throw new AppError("Invalid password", 400);
-
-    await this.revokeCurrentSession();
-    return await this.createSession(req, user.id);
-  }
-
-  // TODO:
-  // will start working soon
-  async changePassword(req: NextRequest, userId: number, newPassword: string) {
-    const parsed = RegisterRequestSchema.pick({ password: true }).safeParse({
-      password: newPassword,
-    });
-
-    if (!parsed.success)
-      throw new AppError(parsed.error.issues[0].message, 400);
-
-    const { password } = parsed.data;
-
-    const hash = await bcrypt.hash(password, 10);
-    const user = await prisma.user.update({
-      where: { id: userId },
-      data: { hash_password: hash },
-    });
 
     await this.revokeCurrentSession();
     return await this.createSession(req, user.id);

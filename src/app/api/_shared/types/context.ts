@@ -1,5 +1,5 @@
 import { UserDTO } from "@/src/domains/auth/auth.dto";
-import NextRequestUser from "./nextRequestUser";
+import { NextRequest } from "next/server";
 
 export type RouteContext<P = unknown> = {
   params: Promise<P>;
@@ -7,6 +7,6 @@ export type RouteContext<P = unknown> = {
 };
 
 export type Handler<P = unknown> = (
-  req: NextRequestUser,
+  req: NextRequest,
   ctx: RouteContext<P>
 ) => Promise<Response>;

@@ -5,14 +5,14 @@ import { usersService } from "@/src/domains/users/users.service";
 import { AppError } from "../_shared/utils/appError";
 
 export const GET = errorHandler(
-  authGuard(async (req) => {
+  authGuard(async (req, ctx) => {
     const url = new URL(req.url);
     const email = url.searchParams.get("email");
     const limit = Number(url.searchParams.get("limit") ?? 10);
     if (!email) throw new AppError("Bad request", 400);
 
     const users = await usersService.getUsersByEmail({
-      currentUser: req.user,
+      currentUser: ctx.user,
       email,
       limit,
     });

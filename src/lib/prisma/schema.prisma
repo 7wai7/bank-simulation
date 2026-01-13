@@ -16,8 +16,9 @@ model User {
   sentTransactions     Transaction[] @relation("TransactionFrom")
   receivedTransactions Transaction[] @relation("TransactionTo")
 
-  ledger   LedgerEntry[]
-  sessions Session[]
+  ledger         LedgerEntry[]
+  sessions       Session[]
+  passwordResets PasswordReset[]
 }
 
 model Session {
@@ -33,6 +34,20 @@ model Session {
 
   ip        String?
   userAgent String?
+}
+
+model PasswordReset {
+  id        String    @id @default(uuid())
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  user_id Int
+  user    User @relation(fields: [user_id], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([user_id])
 }
 
 model Transaction {

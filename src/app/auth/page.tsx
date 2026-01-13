@@ -9,6 +9,9 @@ import {
 } from "@/src/domains/auth/auth.schemas";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/src/domains/auth/auth.store";
+import Link from "next/link";
+import AuthForm from "../components/auth/AuthForm";
+import AuthField from "../components/auth/AuthField";
 
 type AuthFormState = RegisterRequestDTO;
 
@@ -28,7 +31,7 @@ export default function AuthPage() {
   const register = useAuthStore((s) => s.register);
   const login = useAuthStore((s) => s.login);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -59,94 +62,63 @@ export default function AuthPage() {
 
   return (
     <main className="page bg-background border-none">
-      <div className="w-full bg-gray-950 m-auto max-w-md border border-gray-500/20">
-        {/* Title */}
-        <div className="px-6 py-4 border-b border-gray-500/20">
-          <h2 className="text-sm tracking-wider font-semibold text-gray-400">
-            AUTHORIZATION
-          </h2>
-          <p className="text-xs text-gray-500 mt-1">
-            Enter your credentials to continue
-          </p>
-        </div>
-
-        {/* Form */}
-        <form className="p-6 flex flex-col space-y-4">
-          <div className="flex flex-col space-y-1">
-            <label className="text-xs text-gray-500 tracking-wider">
-              USERNAME
-            </label>
+      <AuthForm
+        title="AUTHORIZATION"
+        subTitle="Enter your credentials to continue"
+        canSubmit={canSubmit}
+        submitText={loading ? "AUTHORIZING..." : isSignup ? "SIGNUP" : "LOGIN"}
+        error={error}
+        onSubmit={onSubmit}
+        preFooter={
+          <Link
+            href={"/reset-password"}
+            className="text-xs px-6 py-1 text-gray-300 hover:text-white font-bold"
+          >
+            Forgot password
+          </Link>
+        }
+        footer={
+          <>
+            <span>All actions are logged</span>
+            <button
+              className="cursor-pointer text-gray-300 hover:text-white font-bold"
+              onClick={() => setIsSignup((prev) => !prev)}
+            >
+              {isSignup ? "Login" : "Register"}
+            </button>
+          </>
+        }
+      >
+        <AuthField label="USERNAME">
+          <input
+            value={state.username}
+            onChange={(e) => setState({ ...state, username: e.target.value })}
+            type="text"
+            required
+            className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
+          />
+        </AuthField>
+        {isSignup && (
+          <AuthField label="EMAIL">
             <input
-              value={state.username}
-              onChange={(e) => setState({ ...state, username: e.target.value })}
+              value={state.email}
+              onChange={(e) => setState({ ...state, email: e.target.value })}
               type="email"
               required
               className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
             />
-          </div>
-
-          {isSignup && (
-            <div className="flex flex-col space-y-1">
-              <label className="text-xs text-gray-500 tracking-wider">
-                EMAIL
-              </label>
-              <input
-                value={state.email}
-                onChange={(e) => setState({ ...state, email: e.target.value })}
-                type="email"
-                required
-                className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
-              />
-            </div>
-          )}
-
-          <div className="flex flex-col space-y-1">
-            <label className="text-xs text-gray-500 tracking-wider">
-              PASSWORD
-            </label>
-            <input
-              value={state.password}
-              onChange={(e) => setState({ ...state, password: e.target.value })}
-              type="password"
-              required
-              className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
-            />
-          </div>
-
-          <div className="min-h-9">
-            {error && (
-              <div className="text-xs text-red-400 border border-red-400/30 px-3 py-2">
-                {error}
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={handleLogin}
-            disabled={!canSubmit}
-            type="submit"
-            className={clsx(
-              "mt-2 px-4 py-2 border text-sm tracking-wider transition cursor-pointer",
-              !canSubmit
-                ? "border-gray-700 text-gray-600 cursor-not-allowed"
-                : "border-gray-500/40 hover:border-gray-400 hover:text-white animate-[pulse_2s_ease_infinite]"
-            )}
-          >
-            {loading ? "AUTHORIZING..." : isSignup ? "SIGNUP" : "LOGIN"}
-          </button>
-        </form>
-
-        {/* Footer hint */}
-        <div className="px-6 py-3 border-t border-gray-500/20 text-xs text-gray-500 flex justify-between">
-          <span>All actions are logged</span>
-          <button
-            className="cursor-pointer text-gray-300 font-bold"
-            onClick={() => setIsSignup((prev) => !prev)}
-          >
-            {isSignup ? "Login" : "Register"}
-          </button>
-        </div>
-      </div>
+          </AuthField>
+        )}
+        <AuthField label="PASSWORD">
+          <input
+            value={state.password}
+            onChange={(e) => setState({ ...state, password: e.target.value })}
+            type="password"
+            required
+            className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
+          />
+        </AuthField>
+      </AuthForm>
     </main>
   );
 }

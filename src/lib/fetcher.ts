@@ -10,8 +10,7 @@ export async function fetcher<T>(
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
       if (err.response) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const message = (err.response.data as any)?.message ?? "Server error";
+        const message = err.response.data.message ?? "Server error";
 
         // помилка з сервера
         throw new Error(message);
