@@ -54,7 +54,7 @@ export default function ResetPasswordPage() {
           onChange={(e) => setEmail(e.currentTarget.value)}
           type="email"
           required
-          className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
+          className="bg-black text-white border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
         />
       </AuthField>
     </AuthForm>

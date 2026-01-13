@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 export default function HeaderActions() {
   const pathname = usePathname();
-  const isAuthPage = pathname.startsWith("/auth");
+  if (pathname !== "/") return null;
 
-  return <>{!isAuthPage && <CreateTransactionButton />}</>;
+  return <CreateTransactionButton />;
 }

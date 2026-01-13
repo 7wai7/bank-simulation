@@ -60,7 +60,7 @@ export default function AuthPage() {
     !!state.password.trim();
 
   return (
-    <main className="page bg-background border-none">
+    <main className="page bg-transparent border-none">
       <AuthForm
         title="AUTHORIZATION"
         subTitle="Enter your credentials to continue"
@@ -94,7 +94,7 @@ export default function AuthPage() {
             onChange={(e) => setState({ ...state, username: e.target.value })}
             type="text"
             required
-            className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
+            className={inputClassName}
           />
         </AuthField>
         {isSignup && (
@@ -104,7 +104,7 @@ export default function AuthPage() {
               onChange={(e) => setState({ ...state, email: e.target.value })}
               type="email"
               required
-              className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
+              className={inputClassName}
             />
           </AuthField>
         )}
@@ -114,10 +114,21 @@ export default function AuthPage() {
             onChange={(e) => setState({ ...state, password: e.target.value })}
             type="password"
             required
-            className="bg-black border border-gray-500/30 px-3 py-2 text-sm outline-none focus:border-gray-400 transition"
+            className={inputClassName}
           />
         </AuthField>
       </AuthForm>
     </main>
   );
 }
+
+const inputClassName = `
+  bg-black
+  border border-gray-500/30
+  text-white
+  px-3 py-2
+  text-sm
+  outline-none
+  focus:border-gray-400
+  transition
+`;

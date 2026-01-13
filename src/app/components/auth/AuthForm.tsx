@@ -51,9 +51,9 @@ export default function AuthForm({
           disabled={!canSubmit}
           type="submit"
           className={clsx(
-            "mt-2 px-4 py-2 border text-sm tracking-wider transition cursor-pointer",
+            "mt-2 px-4 py-2 border text-sm tracking-wider transition cursor-pointer text-gray-400",
             !canSubmit
-              ? "border-gray-700 text-gray-600 cursor-not-allowed"
+              ? "border-gray-700 cursor-not-allowed"
               : "border-gray-500/40 hover:border-gray-400 hover:text-white animate-[pulse_2s_ease_infinite]"
           )}
         >
