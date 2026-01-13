@@ -10,6 +10,8 @@ const envSchema = z.object({
     .enum(["development", "test", "production"])
     .default("development"),
 
+  APP_URL: z.url(),
+
   PORT: z.coerce.number().default(4000),
 
   DATABASE_URL: z.url(),

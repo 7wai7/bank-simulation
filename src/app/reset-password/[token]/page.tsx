@@ -4,20 +4,47 @@ import { useParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 import AuthForm from "../../components/auth/AuthForm";
 import AuthField from "../../components/auth/AuthField";
+import { useResetPasswordConfirm } from "@/src/domains/password/password.hooks";
+import { RegisterRequestSchema } from "@/src/domains/auth/auth.schemas";
+import z from "zod";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { mutate, isPending, error } = useResetPasswordConfirm();
+  const [err, setError] = useState<string | null>(null);
   const { token } = useParams();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
+    setError(null);
 
-    console.log(token);
+    if (!token) {
+      setError("Token not found");
+      return;
+    }
+
+    const parseResult = z.uuid().safeParse(token);
+    if (!parseResult.success) {
+      setError("Invalid token");
+      return;
+    }
+
+    const parsePassword = RegisterRequestSchema.pick({
+      password: true,
+    }).safeParse({
+      password,
+    });
+
+    if (!parsePassword.success) {
+      setError(parsePassword.error.issues[0].message);
+      return;
+    }
+
+    mutate({ token: parseResult.data, password: parsePassword.data.password });
   };
 
-  const canSubmit = !loading && !!password.trim();
+  const canSubmit = !isPending && !!password.trim();
+  const submitText = isPending ? "PENDING..." : "CHANGE PASSWORD";
 
   return (
     <main className="page bg-background border-none">
@@ -25,8 +52,8 @@ export default function ResetPasswordPage() {
         title="CHANGE PASSWORD"
         subTitle="Enter your new password to continue"
         canSubmit={canSubmit}
-        submitText={loading ? "PENDING..." : "CHANGE PASSWORD"}
-        error={error}
+        submitText={submitText}
+        error={error?.message ?? err}
         onSubmit={onSubmit}
       >
         <AuthField label="PASSWORD">
