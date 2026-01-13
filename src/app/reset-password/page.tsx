@@ -11,12 +11,9 @@ export default function ResetPasswordPage() {
   const [submitted, setSubmitted] = useState(false);
 
   const onSubmit = async (e: FormEvent) => {
-    console.log(submitted);
     e.preventDefault();
     mutate(email, { onSuccess: () => setSubmitted(true) });
   };
-
-  console.log(submitted);
 
   if (submitted) {
     return (
