@@ -48,6 +48,8 @@
 - **Prisma ORM**
 - **PostgreSQL**
 - **bcrypt**
+- **crypto**
+- **zustand**
 - **Zod**
 - **Tailwind**
 - **Netlify** (deploy & env)
