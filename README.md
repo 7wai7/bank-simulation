@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Token Bank
 
-## Getting Started
+**Token Bank** — це навчальний pet-project, який імітує роботу спрощеного банківського сервісу з фокусом на **безпеку, сесії, транзакції та фінансові процеси**.
 
-First, run the development server:
+Проєкт створений з метою глибше розібратися у:
+
+- server-side authentication
+- session-based authorization
+- транзакційній логіці
+- security-практиках, наближених до production
+
+> ⚠️ Усі кошти та транзакції є **симульованими**. Проєкт не обробляє реальні гроші.
+
+---
+
+## Основні можливості
+
+- 🔐 **Аутентифікація через сесії**
+  - httpOnly cookies
+  - збереження сесій у базі даних
+  - автоматичне відкликання (revoke) старих сесій
+
+- 💸 **Транзакції**
+  - відправка та отримання токенів
+  - історія транзакцій
+
+- 🧾 **Ledger-підхід**
+  - баланс обчислюється з історії транзакцій
+  - відсутність прямого зберігання балансу як “source of truth”
+
+- 🔁 **Безпечна зміна паролю**
+  - password reset через email
+  - одноразові токени з обмеженим TTL
+  - відкликання всіх активних сесій після зміни паролю
+
+- 🛡 **Security-first підхід**
+  - rate-limit friendly API
+  - session expiration
+  - IP + User-Agent аудит (лише запис)
+  - захист від user enumeration (частково)
+
+---
+
+## Технологічний стек
+
+- **Next.js**
+- **TypeScript**
+- **Prisma ORM**
+- **PostgreSQL**
+- **bcrypt**
+- **Zod**
+- **Tailwind**
+- **Netlify** (deploy & env)
+- **Resend** (mail)
+
+---
+
+## Архітектура
+
+- Клієнт **не зберігає токени або JWT**
+- Уся авторизація — **через server-side сесії**
+- Кожен запит:
+  - читає session ID з cookie
+  - валідує сесію в БД
+  - перевіряє TTL та revoke
+
+---
+
+## Локальний запуск
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/7wai7/bank-simulation.git
+cd token-bank
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+DATABASE_URL="postgresql://user:macpass@localhost:5432/dbname?schema=public"
+APP_URL="http://localhost:3000"
+JWT_SECRET="token_key"
+SESSION_EXPIRES_IN_SECONDS="1800"
+RESEND_API="<key>"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npx prisma migrate dev
+npm run dev
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Важливо
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Проєкт **не призначений для production**
+- Не реалізовано:
+  - реальні платіжні інтеграції
+  - KYC / AML
+  - 2FA
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Мета проєкту
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+> Створити простий, але архітектурно правильний фінансовий застосунок,
+> з фокусом на **безпеку, чистоту коду та правильні патерни**,
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## License
+
+MIT

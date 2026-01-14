@@ -37,10 +37,10 @@ class AuthService {
     const { username, password } = parsed.data;
 
     const user = await prisma.user.findUnique({ where: { username } });
-    if (!user) throw new AppError("User not found", 404);
+    if (!user) throw new AppError("Invalid credentials", 400);
 
     const ok = await bcrypt.compare(password, user.hash_password);
-    if (!ok) throw new AppError("Invalid password", 400);
+    if (!ok) throw new AppError("Invalid credentials", 400);
 
     await this.revokeCurrentSession();
     return await this.createSession(req, user.id);
