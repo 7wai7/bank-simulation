@@ -14,7 +14,6 @@ export default function UserInitializer({
   initialBalance: number;
   children: React.ReactNode;
 }) {
-  const userStore = useAuthStore((s) => s.user);
   const setUser = useAuthStore((s) => s.setUser);
   const setBalance = useTransactionsStore((s) => s.setBalance);
 
@@ -22,8 +21,6 @@ export default function UserInitializer({
     setUser(user);
     setBalance(initialBalance);
   }, [initialBalance, setBalance, setUser, user]);
-
-  if (!userStore) return;
 
   return <>{children}</>;
 }

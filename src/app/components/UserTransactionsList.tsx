@@ -21,7 +21,7 @@ export default function UserTransactionsList() {
 
   return (
     <ul className="flex flex-col gap-3 overflow-y-auto h-full pr-3 pb-6">
-      {transactions ? (
+      {transactions && user ? (
         transactions.length === 0 ? (
           <div className="flex flex-1 items-center justify-center text-center text-sm tracking-wide py-10">
             <div>
@@ -35,7 +35,7 @@ export default function UserTransactionsList() {
           </div>
         ) : (
           transactions.map((tx) => {
-            const isOutgoing = tx.from.id === user!.id;
+            const isOutgoing = tx.from.id === user.id;
 
             return (
               <li
