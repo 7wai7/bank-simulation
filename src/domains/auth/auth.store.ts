@@ -9,7 +9,7 @@ type State = {
 
   register: (data: RegisterRequestDTO) => Promise<UserDTO>;
   login: (data: LoginRequestDTO) => Promise<UserDTO>;
-  logout: () => void;
+  logout: () => Promise<void>;
   me: () => Promise<UserDTO>;
 };
 

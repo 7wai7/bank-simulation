@@ -1,10 +1,10 @@
 "use client";
 
-import { useAuthStore } from "@/src/domains/auth/auth.store";
 import { useGetUserTransactions } from "@/src/domains/transactions/transactions.hooks";
 import clsx from "clsx";
 import { useMemo } from "react";
 import { useInfiniteScroll } from "../hooks/useInfiniteScroll.hook";
+import { useAuthStore } from "@/src/domains/auth/auth.store";
 
 export default function UserTransactionsList() {
   const user = useAuthStore((s) => s.user);

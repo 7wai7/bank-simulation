@@ -9,6 +9,7 @@ import { NextRequest } from "next/server";
 import { AppError } from "../../app/api/_shared/utils/appError";
 import { LoginRequestDTO, RegisterRequestDTO, SessionDTO } from "./auth.dto";
 import { LoginRequestSchema, RegisterRequestSchema } from "./auth.schemas";
+import { cookies } from "next/headers";
 
 class AuthService {
   async register(req: NextRequest, data: RegisterRequestDTO) {
@@ -46,6 +47,10 @@ class AuthService {
     return await this.createSession(req, user.id);
   }
 
+  async logout() {
+    await this.revokeCurrentSession();
+  }
+
   async createSession(
     req: NextRequest,
     userId: number
@@ -76,6 +81,7 @@ class AuthService {
         where: { id: existSession.session.id },
         data: { revokedAt: new Date() },
       });
+      (await cookies()).delete("session");
     }
   }
 }
