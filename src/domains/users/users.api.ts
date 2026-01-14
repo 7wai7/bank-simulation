@@ -1,6 +1,6 @@
 import { fetcher } from "@/src/lib/fetcher";
-import { UserDTO } from "../auth/auth.dto";
 import api from "@/src/lib/axios";
+import { UserDTO } from "./users.dto";
 
 export const getUsersListByEmailApi = async (email: string) =>
   fetcher<UserDTO[]>(

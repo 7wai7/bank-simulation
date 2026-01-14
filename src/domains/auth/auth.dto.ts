@@ -1,10 +1,9 @@
 import z from "zod";
 import { LoginRequestSchema, RegisterRequestSchema } from "./auth.schemas";
+import { UserDTO } from "../users/users.dto";
 
 export type LoginRequestDTO = z.infer<typeof LoginRequestSchema>;
 export type RegisterRequestDTO = z.infer<typeof RegisterRequestSchema>;
-
-export type UserDTO = { id: number; username: string; email: string };
 
 export type SessionDTO = {
   id: string;

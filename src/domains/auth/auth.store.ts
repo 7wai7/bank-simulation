@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { LoginRequestDTO, RegisterRequestDTO, UserDTO } from "./auth.dto";
+import { LoginRequestDTO, RegisterRequestDTO } from "./auth.dto";
 import { loginApi, logoutApi, meApi, registerApi } from "./auth.api";
+import { UserDTO } from "../users/users.dto";
 
 type State = {
   user: UserDTO | null;

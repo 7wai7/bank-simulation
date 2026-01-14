@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { useAuthStore } from "@/src/domains/auth/auth.store";
-import { UserDTO } from "@/src/domains/auth/auth.dto";
 import { useTransactionsStore } from "@/src/domains/transactions/transactions.store";
+import { UserDTO } from "@/src/domains/users/users.dto";
 
 export default function UserInitializer({
   user,

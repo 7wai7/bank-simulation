@@ -1,6 +1,7 @@
 import api from "@/src/lib/axios";
 import { fetcher } from "@/src/lib/fetcher";
-import { LoginRequestDTO, RegisterRequestDTO, UserDTO } from "./auth.dto";
+import { LoginRequestDTO, RegisterRequestDTO } from "./auth.dto";
+import { UserDTO } from "../users/users.dto";
 
 export const loginApi = async (data: LoginRequestDTO) =>
   fetcher<UserDTO>(api.post("/api/auth/login", data));

@@ -1,4 +1,4 @@
-import { UserDTO } from "@/src/domains/auth/auth.dto";
+import { UserDTO } from "@/src/domains/users/users.dto";
 import { NextRequest } from "next/server";
 
 export type RouteContext<P = unknown> = {

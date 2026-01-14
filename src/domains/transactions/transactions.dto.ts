@@ -1,6 +1,6 @@
 import z from "zod";
-import { UserDTO } from "../auth/auth.dto";
 import { TransactionRequestSchema } from "./transactions.schemas";
+import { UserDTO } from "../users/users.dto";
 
 export type TransactionRequestDTO = z.infer<typeof TransactionRequestSchema>;
 

@@ -1,5 +1,5 @@
 import { prisma } from "@/src/lib/prisma";
-import { UserDTO } from "../auth/auth.dto";
+import { UserDTO } from "./users.dto";
 
 class UsersService {
   async getUsersByEmail({

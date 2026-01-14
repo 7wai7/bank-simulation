@@ -6,7 +6,7 @@ import UsersListTip from "../UsersListTip";
 import Field from "./Field";
 import CurrentBalance from "./CurrentBalance";
 import { useRef, useState } from "react";
-import { UserDTO } from "@/src/domains/auth/auth.dto";
+import { UserDTO } from "@/src/domains/users/users.dto";
 
 export default function CreateTransactionModal() {
   const { isOpen, setIsOpen, state, setState, onSubmit, isPending, error } =

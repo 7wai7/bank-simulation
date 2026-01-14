@@ -1,9 +1,9 @@
 import redis from "@/src/lib/redis";
-import { UserDTO } from "../auth/auth.dto";
 import { prisma } from "@/src/lib/prisma";
 import { AppError } from "@/src/app/api/_shared/utils/appError";
 import { TransactionRequestSchema } from "./transactions.schemas";
 import { TransactionRequestDTO } from "./transactions.dto";
+import { UserDTO } from "../users/users.dto";
 
 class TransactionsService {
   async getUserBalance(userId: number) {
@@ -12,7 +12,6 @@ class TransactionsService {
 
     try {
       balanceCache = await redis.get(`user-balance-${userId}`);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {}
 
     if (balanceCache) balance = +balanceCache;
@@ -107,7 +106,6 @@ class TransactionsService {
     try {
       await redis.set(`user-balance-${user.id}`, String(balance), "EX", 10);
       await redis.del(`user-balance-${toUser.id}`);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {}
 
     return {

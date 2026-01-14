@@ -1,4 +1,4 @@
-import { UserDTO } from "@/src/domains/auth/auth.dto";
+import { UserDTO } from "@/src/domains/users/users.dto";
 import { useGetUsersList } from "@/src/domains/users/users.hooks";
 import clsx from "clsx";
 import { memo } from "react";

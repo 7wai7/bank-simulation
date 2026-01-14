@@ -1,5 +1,5 @@
+import { UserDTO } from "@/src/domains/users/users.dto";
 import LogoutBtn from "./LogoutBtn";
-import { UserDTO } from "@/src/domains/auth/auth.dto";
 
 export default function SideBar({ user }: { user: UserDTO }) {
   return (
