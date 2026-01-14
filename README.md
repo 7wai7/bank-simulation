@@ -79,9 +79,8 @@ npm install
 ### Environment variables
 
 ```env
-DATABASE_URL="postgresql://user:macpass@localhost:5432/dbname?schema=public"
+DATABASE_URL="postgresql://user:password@localhost:5432/dbname?schema=public"
 APP_URL="http://localhost:3000"
-JWT_SECRET="token_key"
 SESSION_EXPIRES_IN_SECONDS="1800"
 RESEND_API="<key>"
 ```
