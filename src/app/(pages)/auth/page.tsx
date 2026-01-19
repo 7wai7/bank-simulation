@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { RegisterRequestDTO } from "../../domains/auth/auth.dto";
+import { RegisterRequestDTO } from "../../../domains/auth/auth.dto";
 import {
   LoginRequestSchema,
   RegisterRequestSchema,
@@ -9,8 +9,8 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/src/domains/auth/auth.store";
 import Link from "next/link";
-import AuthForm from "../components/auth/AuthForm";
-import AuthField from "../components/auth/AuthField";
+import AuthForm from "../../components/auth/AuthForm";
+import AuthField from "../../components/auth/AuthField";
 
 type AuthFormState = RegisterRequestDTO;
 

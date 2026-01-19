@@ -1,8 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import AuthForm from "../components/auth/AuthForm";
-import AuthField from "../components/auth/AuthField";
+import AuthForm from "../../components/auth/AuthForm";
+import AuthField from "../../components/auth/AuthField";
 import { useSendMailToResetPassword } from "@/src/domains/password/password.hooks";
 
 export default function ResetPasswordPage() {

@@ -2,8 +2,8 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import AuthForm from "../../components/auth/AuthForm";
-import AuthField from "../../components/auth/AuthField";
+import AuthForm from "../../../components/auth/AuthForm";
+import AuthField from "../../../components/auth/AuthField";
 import { useResetPasswordConfirm } from "@/src/domains/password/password.hooks";
 import { RegisterRequestSchema } from "@/src/domains/auth/auth.schemas";
 import z from "zod";

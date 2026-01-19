@@ -1,6 +1,6 @@
 import { transactionsService } from "@/src/domains/transactions/transactions.service";
-import UserBalance from "../components/UserBalance";
-import UserTransactionsList from "../components/UserTransactionsList";
+import UserBalance from "../../components/UserBalance";
+import UserTransactionsList from "../../components/UserTransactionsList";
 import { requireUserSessionSafe } from "@/src/shared/utils/requireUserSession";
 import { redirect } from "next/navigation";
 
